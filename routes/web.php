@@ -15,8 +15,11 @@ use App\Http\Controllers\NouyakuController;
 |
 */
 
-Route::get('/', [NouyakuController::class, 'keisan'] ) 
-    ->name('keisan');
+Route::get('/', function () {
+    return view('nouyaku.welcome');
+});
+
+
 
 
 Route::get('/dashboard', function () {
@@ -29,7 +32,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/nouyaku', [NouyakuController::class, 'keisan']);
-Route::post('/nouyaku/keisan', [NouyakuController::class, 'kotae']);
+Route::get('/nouyaku', [NouyakuController::class, 'index']);
+Route::get('/nouyaku/keisan', [NouyakuController::class, 'keisan'])
+    ->name('nouyaku.keisan')
+    ->middleware('auth');
+Route::post('/nouyaku/keisan', [NouyakuController::class, 'kotae'])
+    ->middleware('auth');
 
-require __DIR__.'/auth.php';
+Route::get('/nouyaku/create', [NouyakuController::class, 'create'])
+    ->name('nouyaku.create')
+    ->middleware('auth');
+
+require __DIR__ . '/auth.php';
